@@ -6,9 +6,14 @@ This is a front-end project using the REST Countries API to explore countries by
 - [REST Countries API](https://restcountries.com/)
 
 ## Features
+- Helpful resources (external links)
 - Random country generator
-- Region filter (Africa, Asia, etc.)
-- Flag, capital, languages, and population display
+- Fun fact generator
+- Country leaderboard (area, # of languages, # of borders)
+- Population leaderboard
+- Languages spoken around the world map
+- Explore the world by region (see all countries by continent with key data for each)
+- Name all countries for a continent quiz, name the flag quiz, choose the capital quiz
 
 ## Hosting
 Live site: [insert GitHub Pages link here]

@@ -5,12 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Cal+Sans&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <title>The World Explorer</title>
   <style>
     * {
       box-sizing: border-box;
     }
-
+    h1 {
+  font-size: 2.5rem; /* Try 3rem or higher for larger text */
+  margin-bottom: 1rem;
+}
     body {
       font-family: 'Cal Sans', sans-serif;
       margin: 0;
@@ -31,7 +35,6 @@
       top: 0;
       z-index: 10;
     }
-
     .logo i {
       font-size: 1.2rem;
       color: #000000;
@@ -59,6 +62,7 @@
       background-color: #000;
       color: white;
     }
+    
     #hero-banner {
       position: relative;
       height: 300px;
@@ -144,6 +148,126 @@
     .footer-link:hover {
       background-color: #444;
     }
+    #map { height: 600px; }
+    #controls { margin: 10px; }
+
+    .quiz-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1em auto;
+  max-width: 900px;
+  flex-wrap: wrap;
+}
+
+.quiz-controls .left,
+.quiz-controls .center,
+.quiz-controls .right {
+  flex: 1;
+  text-align: center;
+  margin: 0.5em 0;
+}
+
+.quiz-controls .left {
+  text-align: left;
+}
+
+.quiz-controls .right {
+  text-align: right;
+}
+
+#continent-select {
+  font-size: 1em;
+  padding: 0.5em;
+}
+
+button {
+  padding: 0.5em 1em;
+  border: none;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#submit-button {
+  background-color: #28a745; /* green */
+  color: white;
+}
+
+#clear-button {
+  background-color: #dc3545; /* red */
+  color: white;
+}
+.quiz-section {
+    background-color: black;
+    color: white;
+    text-align: center;
+  padding: 40px 20px;
+}
+
+#flag-container img {
+  width: 200px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+#flag-quiz-controls input {
+  padding: 0.5rem;
+  font-size: 1rem;
+  width: 250px;
+  margin-right: 0.5rem;
+}
+
+#flag-quiz-controls button {
+  padding: 0.5rem 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#flag-quiz-controls button:hover {
+  background-color: #0056b3;
+}
+
+#flag-feedback {
+  font-weight: bold;
+  margin-top: 1rem;
+}
+.btn-green {
+  background-color: #28a745 !important;
+  color: white !important;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  margin: 5px;
+  cursor: pointer;
+}
+
+.btn-green:hover {
+  background-color: #218838 !important;
+}
+
+.btn-red {
+  background-color: #dc3545 !important;
+  color: white !important;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  margin-top: 8px;
+  cursor: pointer;
+}
+
+.btn-red:hover {
+  background-color: #c82333 !important;
+}
+
+#flag-score {
+  font-weight: bold;
+  margin-top: 10px;
+}
     </style>
     </head>
     <body>
@@ -170,8 +294,65 @@
     </div>
   </section>
 
+  <h1 id="continent-title" style="text-align: center;">Countries of Africa</h1>
+  <div class="quiz-controls">
+    <div class="left">
+      <span id="score-display">Score: 0 / 0</span>
+    </div>
+    <div class="center">
+      <select id="continent-select">
+        <option value="Africa">Africa</option>
+        <option value="Asia">Asia</option>
+        <option value="Europe">Europe</option>
+        <option value="North America">North America</option>
+        <option value="South America">South America</option>
+        <option value="Oceania">Oceania</option>
+      </select>
+    </div>
+    <div class="right">
+      <button id="clear-button">Clear Map</button>
+    </div>
+  </div>
   
+  <!-- Your country input and submit -->
+  <div style="text-align: center; margin-bottom: 1em;">
+    <input type="text" id="country-input" placeholder="Enter a country name..." />
+    <button id="submit-button">Submit</button>
+    <div id="feedback" style="margin-top: 0.5em;"></div>
+  </div>
 
+  <div id="map" style="height: 600px;"></div>
+
+
+  <section id="flag-quiz" class="quiz-section">
+    <h1>Name The Flag</h1>
+    <div id="flag-container">
+      <img id="flag-image" alt="Country Flag" />
+    </div>
+    <div id="flag-quiz-controls">
+        <input type="text" id="flag-answer" placeholder="Enter country name..." />
+        <button id="flag-submit" class="btn-green">Submit</button>
+        <p id="flag-feedback"></p>
+        <p id="flag-score">Score: 0 / 0</p>
+        <button id="flag-restart" class="btn-red">Restart Quiz</button>
+        <button id="flag-next" style="display: none;">Next Flag</button>
+      </div>
+  </section>
+
+  <section id="capital-quiz" style="background-color: white; color: black; padding: 3rem 1rem; text-align: center; min-height: 470px;">
+    <h1>Choose The Capital</h1>
+    <h3 id="capital-country" style="font-size: 2rem; margin: 1rem 0;"></h3>
+    <div id="capital-options" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-bottom: 1rem;"></div>
+    <p id="capital-feedback" style="font-weight: bold;"></p>
+    <p id="capital-score" style="margin-top: 1rem;">Score: 0 / 0</p>
+    <div style="margin-top: 1.5rem;">
+        <button id="capital-next" style="background-color: #218838; color: white; border: none; padding: 0.5rem 1rem; margin: 0.25rem; cursor: pointer;">Next</button>
+        <br />
+        <button id="capital-restart" style="background-color: #dc3545; color: white; border: none; padding: 0.5rem 1rem; margin: 0.25rem; cursor: pointer;">Restart Quiz</button>
+      </div>
+  </section>
+  
+  
   <footer>
     <div class="footer-content">
       <p>© 2025 The World Explorer</p>
@@ -184,16 +365,257 @@
     </div>
   </footer>
 
-  <!-- 🔵 SCRIPT -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script>
-
-
     const currentPage = window.location.pathname.split("/").pop();
     document.querySelectorAll(".nav-link").forEach(link => {
         if (link.getAttribute("href") === currentPage) {
         link.classList.add("active");
         }
     });
+
+    let map = L.map('map').setView([20, 0], 2);
+let countryLayer, continentCountries = [], guessedCountries = new Set();
+let countriesByName = {}, countriesByCode = {}, geojsonData = {};
+let guessedLayers = [];
+
+
+// Blank tile layer (no country names)
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
+  attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+  subdomains: 'abcd',
+  maxZoom: 19
+}).addTo(map);
+
+// Load REST Countries API
+async function loadCountriesData() {
+  const response = await fetch('https://restcountries.com/v3.1/all');
+  const data = await response.json();
+  data.forEach(country => {
+    const name = country.name.common.toLowerCase();
+    countriesByName[name] = { code: country.cca3, region: country.region, subregion: country.subregion };
+    countriesByCode[country.cca3] = { name: country.name.common, region: country.region, subregion: country.subregion };
+  });
+}
+
+// Load GeoJSON country borders
+async function loadGeoJSON() {
+  const response = await fetch('https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json');
+  geojsonData = await response.json();
+}
+
+async function initializeMap(continent) {
+  document.getElementById('continent-title').textContent = `Countries of ${continent}`;
+  guessedCountries.clear();
+  updateScore();
+
+  if (countryLayer) map.removeLayer(countryLayer);
+
+  continentCountries = geojsonData.features.filter(f => {
+    const iso = f.id;
+    const c = countriesByCode[iso];
+    return c && (c.region === continent || c.subregion === continent);
+  });
+
+  countryLayer = L.geoJSON({ type: 'FeatureCollection', features: continentCountries }, {
+    style: { color: '#555', weight: 1, fillOpacity: 0.1 }
+  }).addTo(map);
+
+  map.fitBounds(countryLayer.getBounds());
+  updateScore();
+}
+
+function updateScore() {
+  document.getElementById('score-display').textContent =
+    `Score: ${guessedCountries.size} / ${continentCountries.length}`;
+}
+
+function submitAnswer() {
+  const input = document.getElementById('country-input').value.trim().toLowerCase();
+  const match = countriesByName[input];
+
+  if (!match || !continentCountries.some(f => f.id === match.code)) {
+    document.getElementById('feedback').textContent = 'Incorrect!';
+    return;
+  }
+
+  if (guessedCountries.has(match.code)) {
+    document.getElementById('feedback').textContent = 'Already guessed.';
+    return;
+  }
+
+  const feature = continentCountries.find(f => f.id === match.code);
+  if (feature) {
+    guessedCountries.add(match.code);
+    const guessedLayer = L.geoJSON(feature, {
+  style: { color: '#2ecc71', weight: 2, fillOpacity: 0.6 }
+}).addTo(map);
+
+guessedLayers.push(guessedLayer);
+    document.getElementById('feedback').textContent = 'Correct!';
+    updateScore();
+    document.getElementById('country-input').value = '';
+  }
+}
+
+function clearMap() {
+  guessedLayers.forEach(layer => map.removeLayer(layer));
+  guessedLayers = [];
+  guessedCountries.clear();
+  updateScore();
+  document.getElementById('feedback').textContent = '';
+  document.getElementById('country-input').value = '';
+}
+
+// Event Listeners
+document.getElementById('continent-select').addEventListener('change', async () => {
+  const continent = document.getElementById('continent-select').value;
+  await initializeMap(continent);
+});
+
+document.getElementById('submit-button').addEventListener('click', submitAnswer);
+document.getElementById('clear-button').addEventListener('click', clearMap);
+
+// Load data and set up map
+(async () => {
+  await loadCountriesData();
+  await loadGeoJSON();
+  await initializeMap("Africa"); // Default continent
+})();
+
+let countries = [];
+let currentCountry = null;
+let correctCount = 0;
+let totalCount = 0;
+
+async function loadCountries() {
+  const res = await fetch("https://restcountries.com/v3.1/all");
+  const data = await res.json();
+  countries = data.filter(c => c.flags && c.name);
+  resetQuiz();
+}
+
+function showNewFlag() {
+  const random = countries[Math.floor(Math.random() * countries.length)];
+  currentCountry = random;
+
+  document.getElementById("flag-image").src = random.flags.png;
+  document.getElementById("flag-feedback").textContent = "";
+  document.getElementById("flag-answer").value = "";
+  document.getElementById("flag-submit").style.display = "inline-block";
+  document.getElementById("flag-next").style.display = "none";
+}
+
+function resetQuiz() {
+  correctCount = 0;
+  totalCount = 0;
+  document.getElementById("flag-score").textContent = `Score: 0 / 0`;
+  showNewFlag();
+}
+
+// Submit Answer
+document.getElementById("flag-submit").addEventListener("click", () => {
+  const guess = document.getElementById("flag-answer").value.trim().toLowerCase();
+  const correct = currentCountry.name.common.toLowerCase();
+  const feedback = document.getElementById("flag-feedback");
+
+  totalCount++;
+  if (guess === correct) {
+    feedback.textContent = "Correct!";
+    feedback.style.color = "green";
+    correctCount++;
+  } else {
+    feedback.textContent = `Incorrect! It was ${currentCountry.name.common}.`;
+    feedback.style.color = "red";
+  }
+
+  document.getElementById("flag-score").textContent = `Score: ${correctCount} / ${totalCount}`;
+  document.getElementById("flag-submit").style.display = "none";
+  document.getElementById("flag-next").style.display = "inline-block";
+});
+
+// Next Flag
+document.getElementById("flag-next").addEventListener("click", showNewFlag);
+
+// Restart
+document.getElementById("flag-restart").addEventListener("click", resetQuiz);
+
+// Load quizzes on page load
+document.addEventListener("DOMContentLoaded", () => {
+  loadCountries();         // Flag quiz
+  loadCapitalQuizData();   // New capital quiz
+});
+
+
+let capitalCountries = [];
+let capitalScore = 0;
+let capitalTotal = 0;
+let currentCapitalQuestion = null;
+
+async function loadCapitalQuizData() {
+  const res = await fetch("https://restcountries.com/v3.1/all");
+  const data = await res.json();
+  capitalCountries = data.filter(c => c.capital && c.capital.length && c.name?.common);
+  nextCapitalQuestion();
+}
+
+function nextCapitalQuestion() {
+  const questionEl = document.getElementById("capital-country");
+  const optionsEl = document.getElementById("capital-options");
+  const feedbackEl = document.getElementById("capital-feedback");
+  const scoreEl = document.getElementById("capital-score");
+
+  feedbackEl.textContent = "";
+
+  const correctCountry = capitalCountries[Math.floor(Math.random() * capitalCountries.length)];
+  currentCapitalQuestion = correctCountry;
+
+  questionEl.textContent = correctCountry.name.common;
+
+  const options = [correctCountry.capital[0]];
+
+  // Add 4 incorrect options
+  while (options.length < 5) {
+    const random = capitalCountries[Math.floor(Math.random() * capitalCountries.length)].capital[0];
+    if (!options.includes(random)) {
+      options.push(random);
+    }
+  }
+
+  // Shuffle options
+  options.sort(() => Math.random() - 0.5);
+
+  optionsEl.innerHTML = "";
+  options.forEach(cap => {
+    const btn = document.createElement("button");
+    btn.textContent = cap;
+    btn.style.padding = "0.5rem 1rem";
+    btn.style.border = "1px solid #333";
+    btn.style.background = "#f0f0f0";
+    btn.style.cursor = "pointer";
+    btn.onclick = () => {
+      capitalTotal++;
+      if (cap === correctCountry.capital[0]) {
+        feedbackEl.textContent = "Correct!";
+        feedbackEl.style.color = "green";
+        capitalScore++;
+      } else {
+        feedbackEl.textContent = `Incorrect! The capital is ${correctCountry.capital[0]}.`;
+        feedbackEl.style.color = "red";
+      }
+      scoreEl.textContent = `Score: ${capitalScore} / ${capitalTotal}`;
+    };
+    optionsEl.appendChild(btn);
+  });
+}
+document.getElementById("capital-next").addEventListener("click", nextCapitalQuestion);
+document.getElementById("capital-restart").addEventListener("click", () => {
+  capitalScore = 0;
+  capitalTotal = 0;
+  document.getElementById("capital-score").textContent = `Score: 0 / 0`;
+  document.getElementById("capital-feedback").textContent = "";
+  nextCapitalQuestion();
+});
 
   </script>
 
