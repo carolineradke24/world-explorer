@@ -26,7 +26,6 @@
       justify-content: space-between;
       align-items: center;
       padding: 1rem 2rem;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
       position: sticky;
       top: 0;
       z-index: 10;
@@ -94,28 +93,76 @@
       margin: 0.25rem 0;
       font-size: 1rem;
     }
-    #hero {
+    #hero-banner {
     background: black;
     color: white;
-    padding: 5rem 1rem;
-    text-align: center;
-    }
-
-    .globe-container {
+    height: auto;
+    width: 100%;
     display: flex;
-    flex-direction: column;
     align-items: center;
+    justify-content: center;
+    padding: 1 2rem;
+    box-sizing: border-box;
     }
 
-    .globe {
-    width: 600px;
+    .hero-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: none; /* remove width cap */
+    padding: 0;
+    margin: 0;
+    }
+
+    .hero-earth {
+    width: 800px;
     height: auto;
     border: none;
-    outline: none;
+    margin: 0;
+    padding: 0;
+    display: block;
     }
-  </style>
-</head>
-<body>
+
+    .hero-text {
+    flex: 1;
+    margin-left: 3rem;
+    min-width: 280px;
+    }
+
+    .hero-text h1 {
+    font-size: 5rem;
+    margin-bottom: 1rem;
+    }
+
+    .hero-text p {
+    font-size: 1.25rem;
+    color: #ccc;
+    line-height: 1.6;
+    max-width: 500px;
+    }
+
+    /* Optional: Better mobile stacking */
+    @media (max-width: 768px) {
+    .hero-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .hero-text {
+        margin-top: 2rem;
+        padding: 0;
+        text-align: center;
+    }
+
+    .hero-earth {
+        width: 100%;
+    }
+    }
+    </style>
+    </head>
+    <body>
 
   <!-- 🔵 HEADER -->
   <header>
@@ -132,15 +179,17 @@
   </header>
 
   <!-- 🔵 MAIN CONTENT -->
+  <section id="hero-banner">
+    <div class="hero-content">
+      <img src="images/earth.jpg" alt="Globe" class="hero-earth" />
+      <div class="hero-text">
+        <h1>The World Explorer</h1>
+        <p>Discover countries from around the world, learn fun facts, and explore by region — all in one place.</p>
+      </div>
+    </div>
+  </section>
+  
   <main>
-    <section id="hero">
-        <div class="globe-container">
-          <img src="images/earthrotating.gif" alt="Spinning Globe" class="globe" />
-        </div>
-    </section>
-    
-    <h1>The World Explorer</h1>
-
     <div id="controls">
       <button id="randomBtn">Show Random Country</button>
       <select id="regionSelect">
