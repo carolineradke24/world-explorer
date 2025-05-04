@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cal+Sans&display=swap" rel="stylesheet">
+  <title>The World Explorer</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Cal Sans', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f5f5f5;
+      color: #333;
+    }
+
+    /* 🔵 HEADER */
+    header {
+      background-color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .logo i {
+      font-size: 1.2rem;
+      color: #000000;
+      margin-right: 0.5rem;
+    }
+
+    nav a {
+      margin-left: 1.5rem;
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+    }
+
+    nav a:hover {
+      color: #0077cc;
+    }
+
+    /* 🔵 MAIN CONTENT */
+    main {
+      padding: 2rem;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    #controls {
+      margin-bottom: 2rem;
+    }
+
+    button, select {
+      padding: 0.5rem 1rem;
+      margin: 0.5rem;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    #countryContainer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      max-width: 400px;
+      margin: 0 auto;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    img {
+      width: 150px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      margin: 1rem 0;
+    }
+
+    p {
+      margin: 0.25rem 0;
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 🔵 HEADER -->
+  <header>
+    <div class="logo">
+        <i class="fas fa-globe-americas"></i>
+        <span>The World Explorer</span>
+    </div>
+    <nav>
+      <a href="#">Explore</a>
+      <a href="#">Regions</a>
+      <a href="#">Learn</a>
+      <a href="#">About</a>
+    </nav>
+  </header>
+
+  <!-- 🔵 MAIN CONTENT -->
+  <main>
+    <h1>The World Explorer</h1>
+
+    <div id="controls">
+      <button id="randomBtn">Show Random Country</button>
+      <select id="regionSelect">
+        <option value="">Filter by Region</option>
+        <option value="Africa">Africa</option>
+        <option value="Americas">Americas</option>
+        <option value="Asia">Asia</option>
+        <option value="Europe">Europe</option>
+        <option value="Oceania">Oceania</option>
+      </select>
+    </div>
+
+    <div id="countryContainer"></div>
+  </main>
+
+  <!-- 🔵 SCRIPT -->
+  <script>
+    const countryContainer = document.getElementById("countryContainer");
+    const randomBtn = document.getElementById("randomBtn");
+    const regionSelect = document.getElementById("regionSelect");
+
+    let selectedRegion = "";
+    let filteredCountries = [];
+
+    const showCountry = (country) => {
+      const { name, flags, capital, region, languages, population } = country;
+      countryContainer.innerHTML = `
+        <h2>${name.common}</h2>
+        <img src="${flags.svg}" alt="Flag of ${name.common}" />
+        <p><strong>Capital:</strong> ${capital ? capital[0] : "N/A"}</p>
+        <p><strong>Region:</strong> ${region}</p>
+        <p><strong>Languages:</strong> ${languages ? Object.values(languages).join(", ") : "N/A"}</p>
+        <p><strong>Population:</strong> ${population.toLocaleString()}</p>
+      `;
+    };
+
+    const fetchCountries = async (region = "") => {
+      const url = region
+        ? `https://restcountries.com/v3.1/region/${region}`
+        : "https://restcountries.com/v3.1/all";
+      const res = await fetch(url);
+      return await res.json();
+    };
+
+    regionSelect.addEventListener("change", async (e) => {
+      selectedRegion = e.target.value;
+      if (selectedRegion) {
+        filteredCountries = await fetchCountries(selectedRegion);
+      } else {
+        filteredCountries = await fetchCountries();
+      }
+      const random = filteredCountries[Math.floor(Math.random() * filteredCountries.length)];
+      showCountry(random);
+    });
+
+    randomBtn.addEventListener("click", async () => {
+      if (filteredCountries.length === 0) {
+        filteredCountries = await fetchCountries(selectedRegion);
+      }
+      const random = filteredCountries[Math.floor(Math.random() * filteredCountries.length)];
+      showCountry(random);
+    });
+  </script>
+
+</body>
+</html>
