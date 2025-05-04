@@ -10,7 +10,10 @@
     * {
       box-sizing: border-box;
     }
-
+    h1 {
+  font-size: 2.5rem; /* Try 3rem or higher for larger text */
+  margin-bottom: 1rem;
+}
     body {
       font-family: 'Cal Sans', sans-serif;
       margin: 0;
@@ -31,7 +34,36 @@
       top: 0;
       z-index: 10;
     }
+    .resource-button {
+  background-color: white;
+  color: black;
+  border: 2px solid rgb(0, 0, 0);
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
 
+.resource-button:hover {
+  background-color: #cbcbcb;
+  color: #000;
+}
+.exploreregions-button {
+  background-color: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
+  border: 2px solid rgb(0, 0, 0);
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.exploreregions-button:hover {
+  background-color: #ffffff;
+  color: #000;
+}
     .logo i {
       font-size: 1.2rem;
       color: #000000;
@@ -64,11 +96,6 @@
     main {
       padding: 2rem;
       text-align: center;
-    }
-
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 1rem;
     }
 
     #controls {
@@ -222,9 +249,33 @@
     </div>
   </section>
 
+  <section id="helpful-resources" style="background: #000000; color: white; padding: 2rem; text-align: center;">
+    <h1>Helpful Resources</h1>
+    <p style="margin-bottom: 1.5rem;">Explore trusted sources to learn more about global regions, countries, and their statistics.</p>
+  
+    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem;">
+      <a href="https://www.cia.gov/the-world-factbook/" target="_blank">
+        <button class="resource-button">CIA World Factbook</button>
+      </a>
+      <a href="http://news.bbc.co.uk/2/hi/country_profiles/default.stm" target="_blank">
+        <button class="resource-button">BBC Country Profiles</button>
+      </a>
+      <a href="https://data.worldbank.org/" target="_blank">
+        <button class="resource-button">World Bank Data</button>
+      </a>
+      <a href="https://www.nationsonline.org/oneworld/" target="_blank">
+        <button class="resource-button">Nations Online</button>
+      </a>
+      <a href="https://www.un.org/en/about-us/member-states" target="_blank">
+        <button class="resource-button">UN Member States</button>
+      </a>
+    </div>
+  </section>
+
   
 
   <main>
+    <h1>Random Country Generator</h1>
     <div id="controls">
       <button id="randomBtn">Show Random Country</button>
       <select id="regionSelect">
