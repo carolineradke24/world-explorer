@@ -1,6 +1,6 @@
-# The World Explorer 🌍
+# The World Explorer
 
-This is a front-end project using the REST Countries API to explore countries by region or at random.
+This is a front-end project using the REST Countries API to explore countries by region, key facts and statistics for each, and fun trivia games to test your world knowledge.
 
 ## API Used
 - [REST Countries API](https://restcountries.com/)
