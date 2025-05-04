@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cal+Sans&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-geo@4.3.0/build/index.umd.min.js"></script>
+  <title>The World Explorer</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    h1 {
+  font-size: 2.5rem; /* Try 3rem or higher for larger text */
+  margin-bottom: 1rem;
+}
+    body {
+      font-family: 'Cal Sans', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #ffffff;
+      color: #333;
+    }
+
+    /* 🔵 HEADER */
+    header {
+      background-color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 2rem;
+      position: sticky;
+      margin-bottom: 0;
+      top: 0;
+      z-index: 10;
+    }
+
+    .logo i {
+      font-size: 1.2rem;
+      color: #000000;
+      margin-right: 0.5rem;
+    }
+
+    nav {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .nav-link {
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+      padding: 0.4rem 1rem;
+      border-radius: 999px;
+    }
+
+    .nav-link:hover {
+      background: #f0f0f0;
+    }
+
+    .nav-link.active {
+      background-color: #000;
+      color: white;
+    }
+    #hero-banner {
+      position: relative;
+      height: 300px;
+      width: 100%;
+      overflow: hidden;
+      margin-top: 0;
+      padding-top: 0;
+    }
+
+    .hero-earth {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      margin: 0;
+      padding: 0;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+      box-sizing: border-box;
+    }
+
+    .hero-text {
+      color: white;
+      max-width: 900px;
+    }
+
+    .hero-text h1 {
+      font-size: clamp(2.5rem, 5vw, 5.5rem);
+      margin-bottom: 1rem;
+    }
+
+    .hero-text p {
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: #eee;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 768px) {
+    .hero-overlay {
+        align-items: center;
+        padding: 2rem 1rem;
+    }
+    }
+    #fun-fact {
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    padding: 3rem 1rem;
+    text-align: center;
+    min-height: 400px;
+    }
+
+    .fun-fact-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 1000px;
+    margin: 0 auto;
+    }
+
+    #funGlobe {
+    font-size: 5rem;
+    cursor: pointer;
+    transition: transform 0.5s ease;
+    margin-bottom: 1rem;
+    }
+
+    #funGlobe.spin {
+    transform: rotate(360deg);
+    }
+
+    #factText {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    max-width: 1000px;
+    }
+    @media (max-width: 768px) {
+    .fun-fact-wrapper {
+       min-height: 360px;
+    }
+    }
+    
+    .leaderboard-section {
+  background-color: #000;
+  color: white;
+  text-align: center;
+  padding: 2rem;
+}
+
+#unitLabel {
+  font-style: italic;
+  color: white;
+}
+
+.bar-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0.5rem 0;
+}
+
+.bar-label {
+  font-weight: bold;
+  color: white;
+  width: 130px; /* fixed width ensures alignment */
+  text-align: left;
+  flex-shrink: 0;
+}
+
+.bar {
+  background: white;
+  height: 2rem;
+  position: relative;
+  border-radius: 6px;
+  max-width: 100%;
+}
+
+.bar-value {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-weight: bold;
+  color: black;
+  white-space: nowrap;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 1rem;
+  transform-origin: right center;
+}
+.controls-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.controls-row select {
+  font-size: 1rem;
+  padding: 0.4rem 0.6rem;
+}
+@media (max-width: 768px) {
+.controls-row {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .bar-label {
+    font-size: 0.9rem;
+    margin-bottom: 0rem;
+  }
+
+  .bar {
+    min-height: 2rem;
+    position: relative;
+  }
+
+  .bar-value {
+    font-size: 0.7rem;
+    transform: scale(0.8) translateY(-50%);
+  }
+}
+.leaderboard-podium {
+  text-align: center;
+  margin-top: 3rem;
+}
+
+.podium-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.podium {
+  width: 120px;
+  padding: 1rem 0.5rem;
+  border-radius: 12px 12px 0 0;
+  color: white;
+  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.podium img {
+  width: 40px;
+  height: auto;
+  margin: 0.5rem 0;
+  border-radius: 4px;
+}
+
+.podium p {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.podium span {
+  font-size: 0.85rem;
+  font-weight: normal;
+  line-height: 1.2;
+}
+
+/* Individual styles */
+.podium.first {
+  background-color: rgb(232, 196, 20);
+  height: 220px;
+}
+
+.podium.second {
+  background-color: rgb(152, 150, 150);
+  height: 190px;
+}
+
+.podium.third {
+  background-color: #a66b2f; /* bronze */
+  height: 150px;
+}
+#region-section {
+  background: white;
+  color: black;
+  padding: 2rem;
+  text-align: center;
+}
+.continent-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+.continent-card {
+  position: relative;
+  height: 150px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+.continent-card:hover {
+  transform: scale(1.03);
+}
+.continent-overlay {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  font-size: 1.3rem;
+  padding: 0.5rem;
+  font-weight: bold;
+}
+.country-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+.country-card {
+  position: relative;
+  height: 220px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 10px;
+  overflow: hidden;
+  color: white;
+  display: flex;
+  align-items: flex-end;
+}
+.country-overlay {
+  background: rgba(0, 0, 0, 0.5);
+  padding: 0.8rem;
+  width: 100%;
+  font-size: 0.9rem;
+  text-align: left;
+}
+.country-overlay h4 {
+  margin: 0 0 0.3rem 0;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+    footer {
+      background-color: #000;
+      color: white;
+      text-align: center;
+      padding: 2rem 1rem;
+    }
+
+    .footer-content p {
+      margin: 0.5rem 0;
+    }
+
+    .footer-nav {
+      margin-top: 1rem;
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-link {
+      color: white;
+      text-decoration: none;
+      padding: 0.4rem 1rem;
+      border-radius: 999px;
+      background-color: #222;
+    }
+
+    .footer-link:hover {
+      background-color: #444;
+    }
+    </style>
+    </head>
+    <body>
+
+  <!-- 🔵 HEADER -->
+  <header>
+    <div class="logo">
+        <i class="fas fa-globe-americas"></i>
+        <span>The World Explorer</span>
+    </div>
+    <nav>
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="learn.html" class="nav-link">Learn</a>
+        <a href="trivia.html" class="nav-link">Trivia</a>
+    </nav>
+  </header>
+
+  <section id="hero-banner">
+    <img src="images/earthspace.jpg" alt="Globe" class="hero-earth" />
+    <div class="hero-overlay">
+      <div class="hero-text">
+        <h1>Learn</h1>
+      </div>
+    </div>
+  </section>
+
+  <section id="fun-fact">
+    <div class="fun-fact-wrapper">
+      <h1 style="text-align: center;">Did You Know?</h1>
+      <i class="fas fa-globe-americas" id="funGlobe"></i>
+      <p id="factText">Click the globe for a fun fact!</p>
+    </div>
+  </section>
+
+  <section class="leaderboard-section">
+    <h1>Country Leaderboard</h1>
+    <div class="controls-row">
+        <select id="sortSelect">
+          <option value="area">Area</option>
+          <option value="languages"># of Languages</option>
+          <option value="borders"># of Borders</option>
+        </select>
+        <p id="unitLabel">Units:</p>
+      </div>
+    <div id="barChartContainer" class="bar-chart-container"></div>
+  </section>
+
+  <section class="leaderboard-podium">
+    <h1>Population Leaderboard</h1>
+    <div id="podiumContainer" class="podium-container"></div>
+  </section>
+
+  <section class="language-map-section" style="padding: 2rem; background: black; color: white;">
+    <h1 style="text-align: center;">Languages Spoken Around The World</h1>
+    <p style="text-align: center;">Countries in dark blue speak the selected language</p>
+    <div style="text-align: center; margin-bottom: 1rem;">
+      <label for="languageSelect">Choose a language:</label>
+      <select id="languageSelect"></select>
+    </div>
+    <canvas id="languageMap" width="900" height="500"></canvas>
+  </section>
+
+  <section id="region-section">
+    <h2>Explore the World by Region</h2>
+    <div class="continent-grid">
+      <div class="continent-card" data-region="Africa" style="background-image: url('images/africa.jpg');">
+        <div class="continent-overlay">Africa</div>
+      </div>
+      <div class="continent-card" data-region="Asia" style="background-image: url('images/asia.jpg');">
+        <div class="continent-overlay">Asia</div>
+      </div>
+      <div class="continent-card" data-region="Europe" style="background-image: url('images/europe.jpg');">
+        <div class="continent-overlay">Europe</div>
+      </div>
+      <div class="continent-card" data-region="North America" style="background-image: url('images/north-america.jpg');">
+        <div class="continent-overlay">North America</div>
+      </div>
+      <div class="continent-card" data-region="South America" style="background-image: url('images/south-america.jpg');">
+        <div class="continent-overlay">South America</div>
+      </div>
+      <div class="continent-card" data-region="Oceania" style="background-image: url('images/oceania.jpg');">
+        <div class="continent-overlay">Oceania</div>
+      </div>
+      <div class="continent-card" data-region="Antarctica" style="background-image: url('images/antarctica.jpg');">
+        <div class="continent-overlay">Antarctica</div>
+      </div>
+    </div>
+    <div id="country-display"></div>
+  </section>
+
+  <footer>
+    <div class="footer-content">
+      <p>© 2025 The World Explorer</p>
+      <p>Learn more about the countries and regions that make up our home</p>
+      <nav class="footer-nav">
+        <a href="index.html" class="footer-link">Home</a>
+        <a href="learn.html" class="footer-link">Learn</a>
+        <a href="trivia.html" class="footer-link">Trivia</a>
+      </nav>
+    </div>
+  </footer>
+
+  <!-- 🔵 SCRIPT -->
+  <script>
+
+
+    const currentPage = window.location.pathname.split("/").pop();
+    document.querySelectorAll(".nav-link").forEach(link => {
+        if (link.getAttribute("href") === currentPage) {
+        link.classList.add("active");
+        }
+    });
+
+    const funGlobe = document.getElementById("funGlobe");
+const factText = document.getElementById("factText");
+
+let countries = [];
+let usedFactTypes = [];
+
+const factTypes = [
+  "smallest",
+  "largest",
+  "uniqueLang",
+  "multipleCapitals",
+  "highestDensity",
+  "lowestDensity",
+  "longestName",
+  "shortestName",
+  "countryWithOcean",
+  "countryWithNoBorders"
+];
+
+// Fetch once on load
+async function loadCountries() {
+  const res = await fetch("https://restcountries.com/v3.1/all");
+  countries = await res.json();
+}
+
+// Choose the next unused fact type
+function getNextFactType() {
+  if (usedFactTypes.length === factTypes.length) {
+    usedFactTypes = [];
+  }
+
+  const remaining = factTypes.filter(type => !usedFactTypes.includes(type));
+  const next = remaining[Math.floor(Math.random() * remaining.length)];
+  usedFactTypes.push(next);
+  return next;
+}
+
+// Generate a fact based on type — returns empty string if invalid
+function generateFact(type) {
+  try {
+    switch (type) {
+      case "smallest": {
+        const c = countries.reduce((a, b) => a.population < b.population ? a : b);
+        return `The smallest country by population is <strong>${c.name.common}</strong> with only <strong>${c.population.toLocaleString()}</strong> people.`;
+      }
+
+      case "largest": {
+        const c = countries.reduce((a, b) => a.population > b.population ? a : b);
+        return `The largest country by population is <strong>${c.name.common}</strong> with over <strong>${c.population.toLocaleString()}</strong> people.`;
+      }
+
+      case "uniqueLang": {
+        const c = countries.reduce((a, b) => {
+          const aCount = a.languages ? Object.keys(a.languages).length : 0;
+          const bCount = b.languages ? Object.keys(b.languages).length : 0;
+          return bCount > aCount ? b : a;
+        });
+        const langs = Object.values(c.languages || {}).join(", ");
+        return `<strong>${c.name.common}</strong> recognizes the most languages: <strong>${langs}</strong>.`;
+      }
+
+      case "multipleCapitals": {
+        const c = countries.find(c => c.capital && c.capital.length > 1);
+        return c ? `<strong>${c.name.common}</strong> has multiple capital cities: <strong>${c.capital.join(", ")}</strong>.` : "";
+      }
+
+      case "highestDensity": {
+        const c = countries.filter(c => c.population && c.area)
+          .reduce((a, b) => a.population / a.area > b.population / b.area ? a : b);
+        const density = Math.round(c.population / c.area);
+        return `The most densely populated country is <strong>${c.name.common}</strong> with about <strong>${density} people/km²</strong>.`;
+      }
+
+      case "lowestDensity": {
+        const c = countries.filter(c => c.population && c.area)
+          .reduce((a, b) => a.population / a.area < b.population / b.area ? a : b);
+        const density = Math.round(c.population / c.area);
+        return `The least densely populated country is <strong>${c.name.common}</strong> with just <strong>${density} people/km²</strong>.`;
+      }
+
+      case "longestName": {
+        const c = countries.reduce((a, b) => a.name.common.length > b.name.common.length ? a : b);
+        return `<strong>${c.name.common}</strong> has the longest country name — <strong>${c.name.common.length}</strong> letters long.`;
+      }
+
+      case "shortestName": {
+        const c = countries.reduce((a, b) => a.name.common.length < b.name.common.length ? a : b);
+        return `<strong>${c.name.common}</strong> has the shortest country name — just <strong>${c.name.common.length}</strong> letters.`;
+      }
+
+      case "countryWithOcean": {
+        const c = countries.find(c => !c.borders);
+        return c ? `<strong>${c.name.common}</strong> has no land borders — it's surrounded by ocean.` : "";
+      }
+
+      case "countryWithNoBorders": {
+        const c = countries.find(c => c.borders && c.borders.length === 0);
+        return c ? `<strong>${c.name.common}</strong> has zero land borders with any other country.` : "";
+      }
+
+      default:
+        return "";
+    }
+  } catch {
+    return "";
+  }
+}
+
+// Attempt to generate a valid fact — retry if empty
+function getValidFact() {
+  let attempts = 0;
+  let fact = "";
+
+  while (!fact && attempts < factTypes.length * 2) {
+    const type = getNextFactType();
+    fact = generateFact(type);
+    attempts++;
+  }
+
+  return fact || "Here's a fun fact about the world!";
+}
+
+funGlobe.addEventListener("click", () => {
+  funGlobe.classList.add("spin");
+  setTimeout(() => funGlobe.classList.remove("spin"), 600);
+
+  const fact = getValidFact();
+  factText.innerHTML = fact;
+});
+
+loadCountries();
+
+const sortSelect = document.getElementById("sortSelect");
+const barChartContainer = document.getElementById("barChartContainer");
+
+let countriesData = [];
+
+async function loadCountriesData() {
+  const res = await fetch("https://restcountries.com/v3.1/all");
+  const data = await res.json();
+
+  countriesData = data
+  .filter(c => c.population && c.area && c.name?.common)
+  .map(c => ({
+    name: c.name.common,
+    population: c.population,
+    area: c.area,
+    languages: c.languages,
+    borders: c.borders,
+    flag: c.flags && c.flags.png ? c.flags.png : ""
+}));
+
+function renderPodium() {
+  const top3 = [...countriesData]
+    .sort((a, b) => b.population - a.population)
+    .slice(0, 3);
+
+  const podiumHTML = `
+    <div class="podium second">
+      <p>#2</p>
+      <img src="${top3[1].flag}" alt="${top3[1].name} flag" />
+      <strong>${top3[1].name}</strong>
+      <span>${top3[1].population.toLocaleString()}<br />people</span>
+    </div>
+    <div class="podium first">
+      <p>#1</p>
+      <img src="${top3[0].flag}" alt="${top3[0].name} flag" />
+      <strong>${top3[0].name}</strong>
+      <span>${top3[0].population.toLocaleString()}<br />people</span>
+    </div>
+    <div class="podium third">
+      <p>#3</p>
+      <img src="${top3[2].flag}" alt="${top3[2].name} flag" />
+      <strong>${top3[2].name}</strong>
+      <span>${top3[2].population.toLocaleString()}<br />people</span>
+    </div>
+  `;
+
+  document.getElementById("podiumContainer").innerHTML = podiumHTML;
+}
+
+  renderChart("area");
+  renderPodium();
+}
+
+function renderChart(sortBy) {
+  const sorted = [...countriesData];
+
+  if (sortBy === "area") {
+    sorted.sort((a, b) => b.area - a.area);
+  } else if (sortBy === "languages") {
+    sorted.sort((a, b) => {
+      const aLangs = a.languages ? Object.keys(a.languages).length : 0;
+      const bLangs = b.languages ? Object.keys(b.languages).length : 0;
+      return bLangs - aLangs;
+    });
+  } else if (sortBy === "borders") {
+    sorted.sort((a, b) => {
+      const aBorders = a.borders ? a.borders.length : 0;
+      const bBorders = b.borders ? b.borders.length : 0;
+      return bBorders - aBorders;
+    });
+  }
+
+  const top10 = sorted.slice(0, 10);
+
+  const unitLabel = document.getElementById("unitLabel");
+  let unit = "";
+  if (sortBy === "area") unit = "km²";
+  if (sortBy === "languages") unit = "languages";
+  if (sortBy === "borders") unit = "borders";
+  unitLabel.textContent = `Units: ${unit}`;
+
+  const max = Math.max(...top10.map(c =>
+    sortBy === "area" ? c.area :
+    sortBy === "languages" ? (c.languages ? Object.keys(c.languages).length : 0) :
+    sortBy === "borders" ? (c.borders ? c.borders.length : 0) :
+    1
+  ));
+
+  const barChartContainer = document.getElementById("barChartContainer");
+  barChartContainer.innerHTML = top10
+  .map(c => {
+    const value =
+      sortBy === "area" ? c.area :
+      sortBy === "languages" ? (c.languages ? Object.keys(c.languages).length : 0) :
+      sortBy === "borders" ? (c.borders ? c.borders.length : 0) :
+      0;
+
+    const widthPercent = (value / max) * 100;
+
+    return `
+      <div class="bar-container">
+        <span class="bar-label">${c.name}</span>
+        <div class="bar" style="width: ${widthPercent}%;">
+          <span class="bar-value">${Math.round(value).toLocaleString()}</span>
+        </div>
+      </div>
+    `;
+  })
+  .join("");
+}
+
+sortSelect.addEventListener("change", e => {
+  renderChart(e.target.value);
+});
+
+loadCountriesData();
+
+async function renderLanguageMap() {
+  const countriesRaw = await fetch("https://restcountries.com/v3.1/all").then(res => res.json());
+  const world = await fetch("https://unpkg.com/world-atlas@2.0.2/countries-50m.json").then(res => res.json());
+
+  const countriesGeo = ChartGeo.topojson.feature(world, world.objects.countries).features;
+
+  const countryLanguages = {};
+  const languageSet = new Set();
+
+  // Create mapping from cca3 to spoken languages
+  countriesRaw.forEach(c => {
+    if (!c.cca3 || !c.languages) return;
+    const langs = Object.values(c.languages);
+    countryLanguages[c.cca3] = langs;
+    langs.forEach(lang => languageSet.add(lang));
+  });
+
+  // Map world Atlas numeric country ID to ISO3 (cca3)
+  const idToISO3 = {};
+  countriesRaw.forEach(c => {
+    if (c.cca3 && c.ccn3) {
+      idToISO3[parseInt(c.ccn3)] = c.cca3;
+    }
+  });
+
+  // Populate dropdown
+  const languageSelect = document.getElementById("languageSelect");
+  [...languageSet].sort().forEach(lang => {
+    const opt = document.createElement("option");
+    opt.value = lang;
+    opt.textContent = lang;
+    languageSelect.appendChild(opt);
+  });
+
+  const ctx = document.getElementById("languageMap").getContext("2d");
+
+  const chart = new Chart(ctx, {
+    type: "choropleth",
+    data: {
+      labels: countriesGeo.map(d => d.properties.name),
+      datasets: [{
+        label: "Language Presence",
+        data: countriesGeo.map(f => ({
+          feature: f,
+          value: 0
+        }))
+      }]
+    },
+    options: {
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => `${ctx.chart.data.labels[ctx.dataIndex]}`
+          }
+        }
+      },
+      scales: {
+        projection: {
+          axis: "x",
+          projection: "equalEarth"
+        },
+        color: {
+          axis: "x",
+          display: false,
+          quantize: 2,
+          range: ["#ccc", "#007BFF"]  // gray to blue
+        }
+      }
+    }
+  });
+
+  // Update chart when a language is selected
+  languageSelect.addEventListener("change", () => {
+    const selectedLang = languageSelect.value;
+
+    chart.data.datasets[0].data = countriesGeo.map(f => {
+      const iso3 = idToISO3[f.id];
+      const speaksLang = countryLanguages[iso3]?.includes(selectedLang);
+      return {
+        feature: f,
+        value: speaksLang ? 1 : 0
+      };
+    });
+
+    chart.update();
+  });
+
+  // Initial trigger
+  languageSelect.selectedIndex = 0;
+  languageSelect.dispatchEvent(new Event("change"));
+}
+
+renderLanguageMap();
+
+let allCountries = [];
+
+async function loadRegions() {
+  const res = await fetch("https://restcountries.com/v3.1/all");
+  const data = await res.json();
+  allCountries = data;
+}
+
+function renderCountriesByRegion(region) {
+  const container = document.getElementById("country-display");
+
+  let filtered;
+
+  if (region === "North America" || region === "South America") {
+    filtered = allCountries.filter(c => c.subregion === region);
+  } else if (region === "Antarctica") {
+    // Special case for Polar + keyword match
+    filtered = allCountries.filter(c =>
+      c.region === "Polar" ||
+      c.subregion === "Antarctica" ||
+      c.name.common.toLowerCase().includes("antarctica")
+    );
+  } else {
+    filtered = allCountries.filter(c => c.region === region);
+  }
+
+  const html = `
+    <h3>${region}</h3>
+    <div class="country-grid">
+      ${filtered.map(c => `
+        <div class="country-card" style="background-image: url('${c.flags?.png || ''}');">
+          <div class="country-overlay">
+            <h4>${c.name.common}</h4>
+            <p>Capital: ${c.capital?.[0] || 'N/A'}</p>
+            <p>Population: ${c.population?.toLocaleString() || 'N/A'}</p>
+            <p>Area: ${c.area?.toLocaleString() || 'N/A'} km²</p>
+            <p>Languages: ${c.languages ? Object.values(c.languages).join(', ') : 'N/A'}</p>
+          </div>
+        </div>
+      `).join("")}
+    </div>
+  `;
+
+  container.innerHTML = html;
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  loadRegions().then(() => {
+    document.querySelectorAll(".continent-card").forEach(card => {
+      card.addEventListener("click", () => {
+        const region = card.getAttribute("data-region");
+        renderCountriesByRegion(region);
+      });
+    });
+  });
+});
+
+  </script>
+
+</body>
+</html>
