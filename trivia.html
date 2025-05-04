@@ -268,6 +268,21 @@ button {
   font-weight: bold;
   margin-top: 10px;
 }
+.logo-link {
+  text-decoration: none;
+  color: inherit;
+  outline: none !important;
+  box-shadow: none !important;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.logo-link:focus,
+.logo-link:active {
+  outline: none !important;
+  box-shadow: none !important;
+  text-decoration: none;
+}
     </style>
     </head>
     <body>
@@ -275,8 +290,10 @@ button {
   <!-- 🔵 HEADER -->
   <header>
     <div class="logo">
-        <i class="fas fa-globe-americas"></i>
-        <span>The World Explorer</span>
+        <a href="index.html" class="logo-link" tabindex="-1">
+            <i class="fas fa-globe-americas"></i>
+            <span class="logo-text">The World Explorer</span>
+        </a>
     </div>
     <nav>
         <a href="index.html" class="nav-link">Home</a>
