@@ -11,9 +11,9 @@
       box-sizing: border-box;
     }
     h1 {
-  font-size: 2.5rem; /* Try 3rem or higher for larger text */
-  margin-bottom: 1rem;
-}
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
     body {
       font-family: 'Cal Sans', sans-serif;
       margin: 0;
@@ -21,8 +21,6 @@
       background: #ffffff;
       color: #333;
     }
-
-    /* 🔵 HEADER */
     header {
       height: 50px;
       background-color: white;
@@ -42,32 +40,27 @@
       font-size: 1.5rem;
       cursor: pointer;
     }
-
     .nav-links {
       display: flex;
       gap: 1.5rem;
     }
-
     @media (max-width: 768px) {
-    
     .menu-toggle i {
-  color: black !important;
-}
-
-.menu-toggle {
-  display: block;
-  -webkit-tap-highlight-color: transparent; /* removes blue tap highlight */
-  outline: none;
-}
-
-.menu-toggle:focus,
-.menu-toggle:active,
-.menu-toggle i:focus,
-.menu-toggle i:active {
-  outline: none !important;
-  color: black !important;
-  box-shadow: none !important;
-}
+      color: black !important;
+    }
+    .menu-toggle {
+      display: block;
+      -webkit-tap-highlight-color: transparent; /* removes blue tap highlight */
+      outline: none;
+    }
+    .menu-toggle:focus,
+    .menu-toggle:active,
+    .menu-toggle i:focus,
+    .menu-toggle i:active {
+      outline: none !important;
+      color: black !important;
+      box-shadow: none !important;
+    }
     header {
       height: 50px;
     }
@@ -82,52 +75,49 @@
       box-shadow: 0 4px 6px rgba(0,0,0,0.1);
       z-index: 999;
     }
-
     .nav-links.active {
       display: flex;
     }
     }
     .resource-button {
-  background-color: white;
-  color: black;
-  border: 2px solid rgb(0, 0, 0);
-  padding: 0.6rem 1.2rem;
-  font-size: 1rem;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
+      background-color: white;
+      color: black;
+      border: 2px solid rgb(0, 0, 0);
+      padding: 0.6rem 1.2rem;
+      font-size: 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
 
-.resource-button:hover {
-  background-color: #cbcbcb;
-  color: #000;
-}
-.exploreregions-button {
-  background-color: rgb(0, 0, 0);
-  color: rgb(255, 255, 255);
-  border: 2px solid rgb(0, 0, 0);
-  padding: 0.6rem 1.2rem;
-  font-size: 1rem;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
+    .resource-button:hover {
+      background-color: #cbcbcb;
+      color: #000;
+    }
+    .exploreregions-button {
+      background-color: rgb(0, 0, 0);
+      color: rgb(255, 255, 255);
+      border: 2px solid rgb(0, 0, 0);
+      padding: 0.6rem 1.2rem;
+      font-size: 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
 
-.exploreregions-button:hover {
-  background-color: #ffffff;
-  color: #000;
-}
+    .exploreregions-button:hover {
+      background-color: #ffffff;
+      color: #000;
+    }
     .logo i {
       font-size: 1.2rem;
       color: #000000;
       margin-right: 0.5rem;
     }
-
     nav {
       display: flex;
       gap: 1.5rem;
     }
-
     .nav-link {
       text-decoration: none;
       color: #333;
@@ -135,33 +125,26 @@
       padding: 0.4rem 1rem;
       border-radius: 999px;
     }
-
     .nav-link:hover {
       background: #f0f0f0;
     }
-
     .nav-link.active {
       background-color: #000;
       color: white;
     }
-    
-    /* 🔵 MAIN CONTENT */
     main {
       padding: 2rem;
       text-align: center;
     }
-
     #controls {
       margin-bottom: 2rem;
     }
-
     button, select {
       padding: 0.5rem 1rem;
       margin: 0.5rem;
       font-size: 1rem;
       cursor: pointer;
     }
-
     #countryContainer {
       display: flex;
       flex-direction: column;
@@ -173,7 +156,6 @@
       margin: 0 auto;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
-
     img {
       width: 150px;
       border-radius: 4px;
@@ -197,7 +179,6 @@
       padding-top: 0;
       border: none;
     }
-
     .hero-earth {
       width: 100%;
       height: 100%;
@@ -207,7 +188,6 @@
       padding: 0;
       border: none;
     }
-
     .hero-overlay {
       position: absolute;
       top: 0;
@@ -222,41 +202,34 @@
       padding: 2rem;
       box-sizing: border-box;
     }
-
     .hero-text {
       color: white;
       max-width: 900px;
     }
-
     .hero-text h1 {
       font-size: clamp(2.5rem, 5vw, 5.5rem);
       margin-bottom: 1rem;
     }
-
     .hero-text p {
       font-size: clamp(1rem, 2.5vw, 1.25rem);
       color: #eee;
       line-height: 1.6;
     }
-
     @media (max-width: 768px) {
     .hero-overlay {
         align-items: center;
         padding: 2rem 1rem;
     }
     }
-
     footer {
       background-color: #000;
       color: white;
       text-align: center;
       padding: 2rem 1rem;
     }
-
     .footer-content p {
       margin: 0.5rem 0;
     }
-
     .footer-nav {
       margin-top: 1rem;
       display: flex;
@@ -264,7 +237,6 @@
       gap: 1.5rem;
       flex-wrap: wrap;
     }
-
     .footer-link {
       color: white;
       text-decoration: none;
@@ -272,30 +244,27 @@
       border-radius: 999px;
       background-color: #222;
     }
-
     .footer-link:hover {
       background-color: #444;
     }
     .logo-link {
-  text-decoration: none;
-  color: inherit;
-  outline: none !important;
-  box-shadow: none !important;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.logo-link:focus,
-.logo-link:active {
-  outline: none !important;
-  box-shadow: none !important;
-  text-decoration: none;
-}
+      text-decoration: none;
+      color: inherit;
+      outline: none !important;
+      box-shadow: none !important;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .logo-link:focus,
+    .logo-link:active {
+      outline: none !important;
+      box-shadow: none !important;
+      text-decoration: none;
+    }
     </style>
     </head>
     <body>
 
-  <!-- 🔵 HEADER -->
   <header>
     <div class="logo">
         <a href="index.html" class="logo-link" tabindex="-1">
@@ -313,7 +282,6 @@
     </nav>
   </header>
 
-  <!-- 🔵 MAIN CONTENT -->
   <section id="hero-banner">
     <img src="images/earthspace.jpg" alt="Globe" class="hero-earth" />
     <div class="hero-overlay">
@@ -347,8 +315,6 @@
     </div>
   </section>
 
-  
-
   <main>
     <h1>Random Country Generator</h1>
     <div id="controls">
@@ -378,7 +344,6 @@
     </div>
   </footer>
 
-  <!-- 🔵 SCRIPT -->
   <script>
     const countryContainer = document.getElementById("countryContainer");
     const randomBtn = document.getElementById("randomBtn");
@@ -426,7 +391,6 @@
       showCountry(random);
     });
 
-
     const currentPage = window.location.pathname.split("/").pop();
     document.querySelectorAll(".nav-link").forEach(link => {
         if (link.getAttribute("href") === currentPage) {
@@ -436,7 +400,7 @@
 
     document.querySelector('.menu-toggle').addEventListener('click', () => {
     document.querySelector('.nav-links').classList.toggle('active');
-  });
+    });
 
   </script>
 
