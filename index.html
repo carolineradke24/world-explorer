@@ -51,7 +51,7 @@
     @media (max-width: 768px) {
     
     .menu-toggle i {
-  color: black;
+  color: black !important;
 }
 
 .menu-toggle {
@@ -61,9 +61,12 @@
 }
 
 .menu-toggle:focus,
-.menu-toggle:active {
-  outline: none;
-  box-shadow: none;
+.menu-toggle:active,
+.menu-toggle i:focus,
+.menu-toggle i:active {
+  outline: none !important;
+  color: black !important;
+  box-shadow: none !important;
 }
     header {
       height: 50px;
