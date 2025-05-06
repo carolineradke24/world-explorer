@@ -24,6 +24,7 @@
 
     /* 🔵 HEADER */
     header {
+      height: 50px;
       background-color: white;
       display: flex;
       justify-content: space-between;
@@ -33,6 +34,42 @@
       margin-bottom: 0;
       top: 0;
       z-index: 10;
+    }
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+    .menu-toggle {
+      display: block;
+    }
+    header {
+      height: 50px;
+    }
+    .nav-links {
+      display: none;
+      flex-direction: column;
+      position: absolute;
+      top: 100%;
+      right: 1rem;
+      background: white;
+      padding: 1rem;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      z-index: 999;
+    }
+
+    .nav-links.active {
+      display: flex;
+    }
     }
     .resource-button {
   background-color: white;
@@ -142,6 +179,7 @@
       overflow: hidden;
       margin-top: 0;
       padding-top: 0;
+      border: none;
     }
 
     .hero-earth {
@@ -151,6 +189,7 @@
       display: block;
       margin: 0;
       padding: 0;
+      border: none;
     }
 
     .hero-overlay {
@@ -248,7 +287,10 @@
             <span class="logo-text">The World Explorer</span>
         </a>
     </div>
-    <nav>
+    <button class="menu-toggle" aria-label="Toggle menu">
+        <i class="fas fa-bars"></i>
+    </button>
+    <nav class="nav-links">
         <a href="index.html" class="nav-link">Home</a>
         <a href="learn.html" class="nav-link">Learn</a>
         <a href="trivia.html" class="nav-link">Trivia</a>
@@ -375,6 +417,10 @@
         link.classList.add("active");
         }
     });
+
+    document.querySelector('.menu-toggle').addEventListener('click', () => {
+    document.querySelector('.nav-links').classList.toggle('active');
+  });
 
   </script>
 

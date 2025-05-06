@@ -12,9 +12,9 @@
       box-sizing: border-box;
     }
     h1 {
-  font-size: 2.5rem; /* Try 3rem or higher for larger text */
-  margin-bottom: 1rem;
-}
+      font-size: 2.5rem; /* Try 3rem or higher for larger text */
+      margin-bottom: 1rem;
+    }
     body {
       font-family: 'Cal Sans', sans-serif;
       margin: 0;
@@ -25,6 +25,7 @@
 
     /* 🔵 HEADER */
     header {
+      height: 50px;
       background-color: white;
       display: flex;
       justify-content: space-between;
@@ -35,6 +36,43 @@
       top: 0;
       z-index: 10;
     }
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+    .menu-toggle {
+      display: block;
+    }
+    header {
+      height: 50px;
+    }
+    .nav-links {
+      display: none;
+      flex-direction: column;
+      position: absolute;
+      top: 100%;
+      right: 1rem;
+      background: white;
+      padding: 1rem;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      z-index: 999;
+    }
+
+    .nav-links.active {
+      display: flex;
+    }
+    }
+
     .logo i {
       font-size: 1.2rem;
       color: #000000;
@@ -62,7 +100,6 @@
       background-color: #000;
       color: white;
     }
-    
     #hero-banner {
       position: relative;
       height: 300px;
@@ -114,8 +151,8 @@
 
     @media (max-width: 768px) {
     .hero-overlay {
-        align-items: center;
-        padding: 2rem 1rem;
+      align-items: center;
+      padding: 2rem 1rem;
     }
     }
     footer {
@@ -295,7 +332,10 @@ button {
             <span class="logo-text">The World Explorer</span>
         </a>
     </div>
-    <nav>
+    <button class="menu-toggle" aria-label="Toggle menu">
+        <i class="fas fa-bars"></i>
+    </button>
+    <nav class="nav-links">
         <a href="index.html" class="nav-link">Home</a>
         <a href="learn.html" class="nav-link">Learn</a>
         <a href="trivia.html" class="nav-link">Trivia</a>
@@ -633,6 +673,10 @@ document.getElementById("capital-restart").addEventListener("click", () => {
   document.getElementById("capital-feedback").textContent = "";
   nextCapitalQuestion();
 });
+
+document.querySelector('.menu-toggle').addEventListener('click', () => {
+    document.querySelector('.nav-links').classList.toggle('active');
+  });
 
   </script>
 
