@@ -212,7 +212,24 @@
 .quiz-controls .right {
   text-align: right;
 }
+@media (max-width: 768px) {
+  .quiz-controls {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+  }
+  .quiz-controls > * {
+    margin-bottom: 1rem;
+  }
 
+  .quiz-controls > *:first-child {
+    margin-bottom: 0;
+  }
+
+  #score-display {
+    text-align: center;
+  }
+}
 #continent-select {
   font-size: 1em;
   padding: 0.5em;
@@ -352,24 +369,21 @@ button {
   </section>
 
   <h1 id="continent-title" style="text-align: center;">Countries of Africa</h1>
-  <div class="quiz-controls">
-    <div class="left">
-      <span id="score-display">Score: 0 / 0</span>
-    </div>
-    <div class="center">
-      <select id="continent-select">
+
+    <div class="quiz-controls">
+    <span id="score-display">Score: 0 / 0</span>
+
+    <select id="continent-select">
         <option value="Africa">Africa</option>
         <option value="Asia">Asia</option>
         <option value="Europe">Europe</option>
         <option value="North America">North America</option>
         <option value="South America">South America</option>
         <option value="Oceania">Oceania</option>
-      </select>
+    </select>
+
+    <button id="clear-button">Clear Map</button>
     </div>
-    <div class="right">
-      <button id="clear-button">Clear Map</button>
-    </div>
-  </div>
   
   <!-- Your country input and submit -->
   <div style="text-align: center; margin-bottom: 1em;">

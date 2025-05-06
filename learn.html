@@ -251,23 +251,31 @@
       padding: 0.4rem 0.6rem;
     }
     @media (max-width: 768px) {
-    .controls-row {
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 0.5rem;
-      }
+    .bar-container {
+      flex-direction: column;
+      align-items: flex-start;
+    }
     .bar-label {
       font-size: 0.9rem;
-      margin-bottom: 0rem;
+      width: 100%;
+      margin-top: 0.5rem;
     }
     .bar {
-      min-height: 2rem;
+      height: 1.8rem;
+      background: white;
       position: relative;
+      border-radius: 6px;
+      max-width: 100%;
+      display: block;
     }
     .bar-value {
-      font-size: 0.7rem;
-      transform: scale(0.8) translateY(-50%);
+      font-size: 0.6rem;
+      position: absolute;
+      right: 0.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: black;
+      font-weight: bold;
     }
     }
     .leaderboard-podium {
@@ -536,7 +544,7 @@
         <div class="continent-overlay">Antarctica</div>
       </div>
     </div>
-    <div id="country-display"></div>
+    <div id="country-display" tabindex="-1"></div>
   </section>
 
   <footer>
@@ -931,17 +939,20 @@ function renderCountriesByRegion(region) {
 
   const html = `
     <h3>${region}</h3>
+    <p>Click on a country to learn more on Wikipedia</p>
     <div class="country-grid">
       ${filtered.map(c => `
+        <a href="https://en.wikipedia.org/wiki/${encodeURIComponent(c.name.common)}" target="_blank" style="text-decoration: none;">
         <div class="country-card" style="background-image: url('${c.flags?.png || ''}');">
-          <div class="country-overlay">
+            <div class="country-overlay">
             <h4>${c.name.common}</h4>
             <p>Capital: ${c.capital?.[0] || 'N/A'}</p>
             <p>Population: ${c.population?.toLocaleString() || 'N/A'}</p>
             <p>Area: ${c.area?.toLocaleString() || 'N/A'} km²</p>
             <p>Languages: ${c.languages ? Object.values(c.languages).join(', ') : 'N/A'}</p>
-          </div>
+            </div>
         </div>
+        </a>
       `).join("")}
     </div>
   `;
@@ -952,10 +963,22 @@ function renderCountriesByRegion(region) {
 document.addEventListener("DOMContentLoaded", () => {
   loadRegions().then(() => {
     document.querySelectorAll(".continent-card").forEach(card => {
-      card.addEventListener("click", () => {
+        card.addEventListener("click", () => {
         const region = card.getAttribute("data-region");
         renderCountriesByRegion(region);
-      });
+        
+        // Smooth scroll to countries
+        const target = document.getElementById("country-display");
+        setTimeout(() => {
+            setTimeout(() => {
+            const target = document.getElementById("country-display");
+            const yOffset = -50; // Adjust for nav bar height
+            const y = target.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+            window.scrollTo({ top: y, behavior: "smooth" });
+            }, 100);
+        }, 100); // slight delay to ensure countries render first
+        });
     });
   });
 });
