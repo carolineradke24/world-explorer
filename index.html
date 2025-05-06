@@ -49,9 +49,22 @@
     }
 
     @media (max-width: 768px) {
-    .menu-toggle {
-      display: block;
-    }
+    
+    .menu-toggle i {
+  color: black;
+}
+
+.menu-toggle {
+  display: block;
+  -webkit-tap-highlight-color: transparent; /* removes blue tap highlight */
+  outline: none;
+}
+
+.menu-toggle:focus,
+.menu-toggle:active {
+  outline: none;
+  box-shadow: none;
+}
     header {
       height: 50px;
     }
