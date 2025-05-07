@@ -183,7 +183,9 @@
     .footer-link:hover {
       background-color: #444;
     }
-    #map { height: 600px; }
+    #map { 
+      height: 600px; 
+    }
     #controls { margin: 10px; }
     .quiz-controls {
       display: flex;
@@ -420,7 +422,9 @@
         }
     });
 
-    let map = L.map('map').setView([20, 0], 2);
+    let map = L.map('map', {
+        scrollWheelZoom: false,
+    }).setView([20, 0], 2);
     let countryLayer, continentCountries = [], guessedCountries = new Set();
     let countriesByName = {}, countriesByCode = {}, geojsonData = {};
     let guessedLayers = [];
@@ -428,7 +432,7 @@
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
     attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
     subdomains: 'abcd',
-    maxZoom: 19
+    maxZoom: 19,
     }).addTo(map);
 
     async function loadCountriesData() {
