@@ -17,7 +17,7 @@ This is a front-end project using the REST Countries API to explore countries by
 - Name all countries for a continent quiz, name the flag quiz, choose the capital quiz
 
 ## Hosting
-- [Live site] (https://carolineradke24.github.io/world-explorer/index.html)
+- https://carolineradke24.github.io/world-explorer/index.html
 
 ## Credits
 Built by Caroline Radke and Isa Haug. API by RESTCountries.com.
